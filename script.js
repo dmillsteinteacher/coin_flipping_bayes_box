@@ -4,6 +4,9 @@ let history = [];
 let trialCounter = 0;
 let historyChart = null; // R4: Placeholder for Chart.js instance
 
+// R10: Minimum prior threshold to prevent locking out hypotheses
+const MIN_PRIOR_THRESHOLD = 0.0001; 
+
 // R3: Color Palette for History Graph (must be consistent)
 const CHART_COLORS = [
     '#E67E22', '#3498DB', '#27AE60', '#8E44AD', '#C0392B', 
@@ -152,7 +155,7 @@ function startSimulation() {
     showTab('update');
 }
 
-// --- Visualization Logic ---
+// --- Visualization Logic (R9 FIX) ---
 
 function renderVisualization(data, elementId) {
     const container = document.getElementById(elementId);
@@ -164,10 +167,14 @@ function renderVisualization(data, elementId) {
     data.forEach(item => {
         const height = item.value * maxBarHeight;
         
+        // R9 FIX: Create a wrapper for the bar and its label
+        const columnWrapper = document.createElement('div');
+        columnWrapper.className = 'bayes-column-wrapper';
+        columnWrapper.style.width = `${barWidthPercent}%`; // Use full percentage width for wrapper
+
         const box = document.createElement('div');
         box.className = 'bayes-box';
         box.style.height = `${height}px`;
-        box.style.width = `${barWidthPercent - 1}%`; 
         
         const valueLabel = document.createElement('div');
         valueLabel.className = 'box-value';
@@ -179,13 +186,16 @@ function renderVisualization(data, elementId) {
 
         box.appendChild(valueLabel);
         
-        // R9 FIX: Reverting to original logic: Append pLabel to the container
-        container.appendChild(box); 
-        container.appendChild(pLabel); 
+        // Append bar and label to the wrapper
+        columnWrapper.appendChild(box); 
+        columnWrapper.appendChild(pLabel); 
+        
+        // Append the wrapper to the container
+        container.appendChild(columnWrapper); 
     });
 }
 
-// --- Update Logic (R1, R5, R6) ---
+// --- Update Logic (R1, R5, R6, R10) ---
 
 function performUpdate() {
     const N = parseInt(document.getElementById('flips-input').value);
@@ -222,17 +232,34 @@ function performUpdate() {
         return;
     }
 
-    // 2. Calculate Final Posterior and Prepare History Record
+    // 2. Calculate Final Posterior
     const currentPosteriorData = [];
+    let posteriorSum = 0;
     
     bayesModel.forEach(h => {
         h.posterior = h.unnormalizedPosterior / totalProbability;
+        
+        // R10: Enforce Minimum Prior Threshold to prevent lockout
+        if (h.posterior < MIN_PRIOR_THRESHOLD) {
+            h.posterior = MIN_PRIOR_THRESHOLD;
+        }
+        
         currentPosteriorData.push({ value: h.posterior, p_value: h.p_value });
+        posteriorSum += h.posterior;
     });
+
+    // R10: Re-normalize after enforcing the minimum floor (since the sum might be > 1)
+    bayesModel.forEach(h => {
+        h.posterior = h.posterior / posteriorSum;
+    });
+    
+    // Re-create the data array with the final normalized values
+    const finalPosteriorData = bayesModel.map(h => ({ value: h.posterior, p_value: h.p_value }));
+
 
     // 3. Render Visualization
     renderVisualization(bayesModel.map(h => ({ value: h.prior, p_value: h.p_value })), 'prior-visualization');
-    renderVisualization(currentPosteriorData, 'posterior-visualization');
+    renderVisualization(finalPosteriorData, 'posterior-visualization');
     
     // R2: Visual Feedback (Flash effect)
     const priorViz = document.getElementById('prior-visualization');

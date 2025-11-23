@@ -90,8 +90,6 @@ input[type="number"] {
     justify-content: space-around;
     gap: 20px;
     margin-top: 20px;
-    /* R9 FIX: Add space at the bottom for labels */
-    padding-bottom: 40px;
 }
 
 .bayes-box-container {
@@ -100,13 +98,14 @@ input[type="number"] {
 }
 
 .viz-area {
-    display: flex;
-    height: 300px; /* Fixed height for visualization */
+    /* R9 FIX: Set up Flexbox for horizontal wrappers */
+    display: flex; 
+    height: 300px; 
     border: 1px solid #ccc;
     margin-top: 10px;
-    align-items: flex-end; /* Boxes grow from the bottom */
+    align-items: flex-end; /* Align wrappers to the bottom */
     position: relative;
-    transition: border 0.5s, box-shadow 0.5s; /* R2: Transition for flash effect */
+    transition: border 0.5s, box-shadow 0.5s; 
 }
 
 /* R2: New CSS for Visual Feedback */
@@ -115,25 +114,39 @@ input[type="number"] {
     box-shadow: 0 0 10px rgba(46, 204, 113, 0.7);
 }
 
+/* R9 FIX: New Wrapper for Bar + Label */
+.bayes-column-wrapper {
+    display: flex;
+    flex-direction: column; /* Stack Bar and Label vertically */
+    height: 100%; /* Take up the full 300px height */
+    justify-content: flex-end; /* Push content (Bar + Label) to the bottom */
+    position: relative;
+    margin: 0 1px;
+    flex-shrink: 0;
+}
+
 .bayes-box {
-    /* R9 FIX: Reverting to original simple positioning */
+    /* R9 FIX: Final Bar Styles */
     background-color: #3498DB; 
     border-top: 1px solid #000;
-    margin: 0 1px;
     display: flex;
     flex-direction: column-reverse;
     justify-content: flex-start;
     transition: height 0.5s ease-out; 
+    
+    flex-shrink: 0; 
+    width: 100%; 
     position: relative; 
 }
 
 .box-label {
-    /* R9 FIX: Anchor relative to the container, and use the container's flow */
+    /* R9 FIX: Simple, static style within the column wrapper */
     text-align: center;
     font-size: 0.8em;
-    position: absolute;
-    bottom: -20px; /* Anchor below the bar */
+    padding-top: 5px;
+    height: 20px; 
     width: 100%;
+    position: static; /* Let the wrapper manage the position */
 }
 
 .box-value {
