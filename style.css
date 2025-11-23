@@ -90,6 +90,8 @@ input[type="number"] {
     justify-content: space-around;
     gap: 20px;
     margin-top: 20px;
+    /* R9 FIX: Add space at the bottom for labels */
+    padding-bottom: 40px;
 }
 
 .bayes-box-container {
@@ -114,8 +116,7 @@ input[type="number"] {
 }
 
 .bayes-box {
-    /* R8 FIX: ADD relative positioning */
-    position: relative; /* <--- REQUIRED to position the label relative to the bar */
+    /* R9 FIX: Reverting to original simple positioning */
     background-color: #3498DB; 
     border-top: 1px solid #000;
     margin: 0 1px;
@@ -123,14 +124,15 @@ input[type="number"] {
     flex-direction: column-reverse;
     justify-content: flex-start;
     transition: height 0.5s ease-out; 
+    position: relative; 
 }
 
 .box-label {
-    /* R8 FIX: Corrected position to sit beneath the 300px visualization area */
+    /* R9 FIX: Anchor relative to the container, and use the container's flow */
     text-align: center;
     font-size: 0.8em;
     position: absolute;
-    top: 300px; /* Pushes the label 300px down, placing it below the viz-area */
+    bottom: -20px; /* Anchor below the bar */
     width: 100%;
 }
 

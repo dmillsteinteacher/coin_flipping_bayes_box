@@ -179,11 +179,9 @@ function renderVisualization(data, elementId) {
 
         box.appendChild(valueLabel);
         
-        // R8 FIX: Append the pLabel to the box element, not the container
-        box.appendChild(pLabel); 
-        
-        // Append the box (which now contains the pLabel) to the main container
+        // R9 FIX: Reverting to original logic: Append pLabel to the container
         container.appendChild(box); 
+        container.appendChild(pLabel); 
     });
 }
 
