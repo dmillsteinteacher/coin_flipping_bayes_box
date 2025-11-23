@@ -171,7 +171,6 @@ function renderVisualization(data, elementId) {
         
         const valueLabel = document.createElement('div');
         valueLabel.className = 'box-value';
-        // Only show value if height is visible (helps prevent clutter)
         valueLabel.textContent = item.value.toFixed(3); 
         
         const pLabel = document.createElement('div');
@@ -179,8 +178,12 @@ function renderVisualization(data, elementId) {
         pLabel.textContent = `p=${item.p_value}`;
 
         box.appendChild(valueLabel);
-        container.appendChild(box);
-        container.appendChild(pLabel); // Label outside the box for better layout
+        
+        // R8 FIX: Append the pLabel to the box element, not the container
+        box.appendChild(pLabel); 
+        
+        // Append the box (which now contains the pLabel) to the main container
+        container.appendChild(box); 
     });
 }
 

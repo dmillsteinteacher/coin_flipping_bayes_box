@@ -114,22 +114,23 @@ input[type="number"] {
 }
 
 .bayes-box {
-    /* Styles for the individual bars */
+    /* R8 FIX: ADD relative positioning */
+    position: relative; /* <--- REQUIRED to position the label relative to the bar */
     background-color: #3498DB; 
     border-top: 1px solid #000;
     margin: 0 1px;
     display: flex;
     flex-direction: column-reverse;
     justify-content: flex-start;
-    position: relative;
     transition: height 0.5s ease-out; 
 }
 
 .box-label {
+    /* R8 FIX: Corrected position to sit beneath the 300px visualization area */
     text-align: center;
     font-size: 0.8em;
     position: absolute;
-    bottom: -20px;
+    top: 300px; /* Pushes the label 300px down, placing it below the viz-area */
     width: 100%;
 }
 
