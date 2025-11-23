@@ -14,6 +14,12 @@ h1 {
     margin-bottom: 20px;
 }
 
+.note {
+    font-size: 0.9em;
+    color: #c0392b;
+    margin-top: 10px;
+}
+
 /* --- Tab Styles --- */
 .tabs {
     display: flex;
@@ -62,7 +68,7 @@ h1 {
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
-    flex: 1 1 150px; /* Responsive sizing */
+    flex: 1 1 150px; 
     min-width: 150px;
 }
 
@@ -97,18 +103,26 @@ input[type="number"] {
     border: 1px solid #ccc;
     margin-top: 10px;
     align-items: flex-end; /* Boxes grow from the bottom */
+    position: relative;
+    transition: border 0.5s, box-shadow 0.5s; /* R2: Transition for flash effect */
+}
+
+/* R2: New CSS for Visual Feedback */
+.viz-area.updated {
+    border: 3px solid #2ECC71; /* Green border flash */
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.7);
 }
 
 .bayes-box {
-    width: 20%; /* Will be dynamically sized based on state count */
-    background-color: #2196F3; /* A standard color */
-    border: 1px solid #000;
+    /* Styles for the individual bars */
+    background-color: #3498DB; 
+    border-top: 1px solid #000;
     margin: 0 1px;
     display: flex;
     flex-direction: column-reverse;
     justify-content: flex-start;
     position: relative;
-    transition: height 0.5s ease-out; /* Smooth transitions for updates */
+    transition: height 0.5s ease-out; 
 }
 
 .box-label {
@@ -121,25 +135,27 @@ input[type="number"] {
 
 .box-value {
     text-align: center;
-    font-size: 0.8em;
-    color: #000;
-    background: rgba(255, 255, 255, 0.7);
+    font-size: 0.7em;
+    color: #fff;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.4);
     padding: 2px 0;
     width: 100%;
 }
 
 /* --- History Styles --- */
-#history-graph-area {
+#history-chart-container {
     width: 100%;
-    height: 300px;
-    border: 1px solid #ccc;
+    max-height: 400px; 
     margin-bottom: 20px;
-    position: relative;
+    padding: 10px;
+    background-color: #fff;
 }
 
 #history-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
 #history-table th, #history-table td {
@@ -150,37 +166,4 @@ input[type="number"] {
 
 #history-table th {
     background-color: #f2f2f2;
-}
-
-/* --- Helper Class for History Graph --- */
-.line-chart-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-.line-chart-line {
-    position: absolute;
-    width: 2px;
-    background-color: black;
-    transform-origin: 0 100%;
-}
-.line-chart-point {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: currentColor;
-    margin-left: -3px;
-    margin-top: -3px;
-}
-.y-axis-label {
-    position: absolute;
-    left: 5px;
-    font-size: 0.8em;
-}
-.x-axis-label {
-    position: absolute;
-    bottom: 5px;
-    text-align: center;
-    font-size: 0.8em;
 }
